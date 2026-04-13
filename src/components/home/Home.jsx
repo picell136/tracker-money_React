@@ -78,7 +78,6 @@ const Home = () => {
         return saved ? JSON.parse(saved) : [];
       });   
 
-
     const onNameChanged = (e) => setName(e.target.value)
     const onCategoryChanged = (e) => setCategory(e.target.value)
     const onCostChanged = (e) => setCost(e.target.value)

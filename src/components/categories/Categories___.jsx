@@ -14,18 +14,14 @@ const Categories = () => {
     const onSaveCategoryClick = () => {
         let date = new Date();
 
-        let updatedList;
-
-        if (name) { // если строка name не пустая, null или undefined, то будет записана категория
-            updatedList = [  ...listCategories, 
-                                    {   categoriesName: name,
-                                        creationTime: date.getTime(), 
-                                        isEdit: false 
-                                    }
-                                ]
+        const updatedList = [  ...listCategories, 
+                                {   categoriesName: name,
+                                    creationTime: date.getTime(), 
+                                    isEdit: false 
+                                }
+                            ]
         setListCategories(updatedList);
-        localStorage.setItem(`categories`, JSON.stringify(updatedList));                                
-        }
+        localStorage.setItem(`categories`, JSON.stringify(updatedList));
     }
 
     const onNameChanged = (e) => setName(e.target.value)
