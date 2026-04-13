@@ -1,0 +1,64 @@
+
+a {
+  text-decoration: none;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.title {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.selects {
+  display: flex;
+}
+
+.selects_text {
+  padding: 4px;
+}
+
+
+/**/
+
+
+.text {
+  padding: 10px;
+  font-size: 20px;
+}
+
+.table th {
+  padding: 5px;
+  border: 1px solid black;
+}
+
+.table td {
+  padding: 5px;
+}
+
+.border-none {
+  border-collapse: collapse;
+  border: none;
+  padding: 15px;
+  font-size: 25px;
+}
+
+.border-none tr:first-child th {
+  border-top: none;
+}
+
+.border-none tr:last-child th {
+  border-bottom: none;
+}
+
+.border-none tr th:first-child {
+  border-left: none;
+}
+
+.border-none tr th:last-child {
+  border-right: none;
+}

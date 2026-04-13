@@ -1,0 +1,129 @@
+.navigation {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 5%;
+}
+
+.icon-arrow:hover {
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.date {
+    font-size: 20px;
+    margin-top: 10px;
+    font-weight: 700;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; 
+}
+
+.buttons2 {
+    display: flex;
+    justify-content: space-around;
+    width: 40%;
+}
+
+.title {
+    margin: 7px;
+    font-size: large;
+    font-weight: 700;
+}
+
+.inputsAndSelect {
+    display: flex;
+	justify-content:space-evenly;
+    height: 30px;
+    margin: 10px;
+}
+
+.inputsAndSelect input {
+    border-radius: 5px;
+    border: none;
+}
+
+.border-none {
+  border-collapse: collapse;
+  border: none;
+  padding: 15px;
+  font-size: 20px;
+
+  table-layout: fixed;
+  width: 100%; 
+
+  word-break: break-word;
+}
+
+.table th {
+  padding: 5px;
+  border: 1px solid black;
+}
+
+.table td {
+  padding: 3px;
+  width: 20%; 
+  word-wrap: break-word; 
+}
+
+.table input {
+    width: 80%;
+}
+
+.border-none tr:first-child th {
+  border-top: none;
+}
+
+
+
+.border-none tr th:first-child {
+  border-left: none;
+}
+
+
+.border-none td {
+  border: 1px solid rgb(82, 82, 82);
+}
+
+.border-none tr:first-child td {
+  border-top: 3px solid black;
+}
+
+.border-none tr:last-child td {
+  border-bottom: none;
+}
+
+.border-none tr td:first-child {
+  border-left: none;
+}
+
+.border-none tr td:last-child {
+  border-right: none;
+}
+
+
+
+
+.purchase {
+    position: relative;
+    left: 0;
+}
+
+.cost {
+    position: absolute; 
+}
+
+.edit {
+    cursor: pointer;
+    font-size: medium;
+}
+
+.delete {
+    cursor: pointer;
+}
