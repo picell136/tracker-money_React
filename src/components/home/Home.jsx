@@ -262,6 +262,7 @@ const Home = () => {
                                                         visibility: elem.isEdit ? 'visible' : 'hidden'
                                                     }}
                                                     value={elem.costValue}
+                                                    
                                                     onChange={(e) => handleEditChange_3(elem.creationTime, e.target.value)} // Функция срабатывающая каждый раз при новом значении
                                                 />
                                             </td>
@@ -321,6 +322,7 @@ const Home = () => {
                         </select>
 
                     <input
+                        type="number" // сделать ограничение, только цифры
                         id="costValue"
                         name="costValue"
                         placeholder='Стоимость'
