@@ -309,9 +309,8 @@ const Stat = () => {
             <hr/>
 
             <div>
-                Рез-т: {result} 
+              {result > -1 ? `Рез-т: ${result} ₽`: null} 
             </div>
-
           </div>
         </>
 }
