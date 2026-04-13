@@ -58,6 +58,20 @@ const Categories = () => {
         localStorage.setItem('categories', JSON.stringify(updatedList));
     };
 
+
+    let createTable = () => listCategories.length === 0 ?
+                    null :
+                    <table className={styles["border-none"]}>
+                        <thead>
+                            <tr>
+                                <th>Название категории</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {listOfCategories()}
+                        </tbody>
+                    </table>  
+
     const listOfCategories = () => {
         if (listCategories.length > 0){     // Проверка, что categories - это массив
             return listCategories.map((category, i) => 
@@ -117,16 +131,7 @@ const Categories = () => {
                 </div>
 
                 <div className={styles.table}>
-                    <table className={styles["border-none"]}>
-                        <thead>
-                            <tr>
-                                <th>Название категории</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {listOfCategories()}
-                        </tbody>
-                    </table>
+                    {createTable()}
                 </div>
             </div>
             </>
