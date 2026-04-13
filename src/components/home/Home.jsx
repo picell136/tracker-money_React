@@ -87,6 +87,7 @@ const Home = () => {
 
         let noteDate = `${displayDay}-${displayMonth}-${displayYear}`
 
+        if (name && category && cost) {
         const updatedList = [  ...listPurchases, 
                                 {   purchaseName: name, 
                                     categoriesName: category,
@@ -96,8 +97,9 @@ const Home = () => {
                                     isEdit: false 
                                 }
                             ]
-        setListPurchases(updatedList);
-        localStorage.setItem(`purchases`, JSON.stringify(updatedList));
+            setListPurchases(updatedList);
+            localStorage.setItem(`purchases`, JSON.stringify(updatedList));
+        }
     }
 
     const categoriesList = () => {

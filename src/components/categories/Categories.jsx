@@ -23,8 +23,8 @@ const Categories = () => {
                                         isEdit: false 
                                     }
                                 ]
-        setListCategories(updatedList);
-        localStorage.setItem(`categories`, JSON.stringify(updatedList));                                
+            setListCategories(updatedList);
+            localStorage.setItem(`categories`, JSON.stringify(updatedList));                                
         }
     }
 
