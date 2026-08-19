@@ -1,90 +1,263 @@
-.title {
-    margin: 7px;
-    font-size: large;
-    font-weight: 500;
+/* --- Общий фон и карточка --- */
+
+.card {
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 520px;
+    padding: 32px 28px;
 }
 
+/* --- Кнопка "На главную" --- */
+.card > button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-bottom: 16px;
+}
+
+.card > button a {
+    color: #2c3d3c;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.card > button a:hover {
+    color: #88d8b0;
+}
+
+.card > button a::before {
+    content: "←";
+    font-size: 16px;
+}
+
+/* --- Заголовок --- */
+.card h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #2d3436;
+    margin: 0 0 24px 0;
+    text-align: center;
+}
+
+/* --- Заголовок секции --- */
+.title {
+    margin: 7px 0 16px 0;
+    font-size: 17px;
+    font-weight: 700;
+    color: #2d3436;
+    text-align: center;
+}
+
+/* --- Поле ввода и кнопка --- */
 .inputButton {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%; 
+    display: flex;
+    justify-content: center;
+    margin-bottom: 28px;
 }
 
 .inputButton2 {
-  display: flex;
-  justify-content: space-around;
-  width: 60%;
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    max-width: 400px;
 }
 
 .inputButton2 input {
-  border: none;
-  border-radius: 4px;
-  font-size: 17px;
+    flex: 1;
+    padding: 14px 18px;
+    border: 2px solid #f0f0f0;
+    border-radius: 16px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.3s, background 0.3s;
+    background: #fafafa;
+    color: #2d3436;
 }
 
-
-.firstButton {
-  font-size: 17px;
-  padding: 5px;
-  cursor: pointer;
+.inputButton2 input:focus {
+    border-color: #f5b7c8;
+    background: #fff;
 }
 
-.secondButton {
-  font-size: 20px;
-  padding: 5px;
-  cursor: pointer;
+.inputButton2 input::placeholder {
+    color: #b2bec3;
 }
 
+.inputButton2 button {
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #f5576c, #ff6b6b);
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 6px 20px rgba(245, 87, 108, 0.35);
+    white-space: nowrap;
+}
 
-table {
-  margin: auto;
-  width: 100%;
+.inputButton2 button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(245, 87, 108, 0.45);
+}
+
+.inputButton2 button:active {
+    transform: translateY(0);
+}
+
+/* --- Таблица --- */
+.table {
+    margin-top: 24px;
 }
 
 .border-none {
-  border-collapse: collapse;
-  border: none;
-  margin-top: 10px;
-  padding: 15px;
-  font-size: 25px;
+    border-collapse: collapse;
+    width: 100%;
+    background: #fff;
 }
 
-.table th {
-  padding: 5px;
-  border: 1px solid black;
+.border-none thead {
+    border-bottom: 3px solid #f0f0f0;
 }
 
-.border-none tr:first-child th {
-  border-top: none;
-}
-
-
-.border-none tr th:first-child {
-  border-left: none;
+.border-none th {
+    padding: 16px 12px;
+    text-align: left;
+    font-size: 15px;
+    font-weight: 700;
+    color: #2d3436;
+    border: none;
 }
 
 .border-none td {
-  border: 1px solid rgb(82, 82, 82);
-}
-
-.border-none tr:first-child td {
-  border-top: 3px solid black;
+    padding: 14px 12px;
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 15px;
+    color: #2d3436;
+    vertical-align: middle;
 }
 
 .border-none tr:last-child td {
-  border-bottom: none;
+    border-bottom: none;
 }
 
-.border-none tr td:first-child {
-  border-left: none;
+.border-none tr:hover td {
+    background: #f8f9fa;
 }
 
-.border-none tr td:last-child {
-  border-right: none;
+/* --- Инпут в таблице --- */
+.border-none td input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid #f5b7c8;
+    border-radius: 12px;
+    font-size: 14px;
+    outline: none;
+    background: #fff;
+    color: #2d3436;
 }
 
-td {
-  text-align: center;
+.border-none td span {
+    display: block;
+    padding: 8px 4px;
 }
 
+/* --- Кнопки редактировать/удалить --- */
+.firstButton,
+.secondButton {
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    padding: 8px 12px !important;
+    border-radius: 8px;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.firstButton {
+    color: #88d8b0;
+    background: rgba(136, 216, 176, 0.1);
+}
+
+.firstButton:hover {
+    background: rgba(136, 216, 176, 0.2);
+    color: #6bc49a;
+}
+
+.secondButton {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+}
+
+.secondButton:hover {
+    background: rgba(255, 107, 107, 0.2);
+    color: #f5576c;
+}
+
+/* --- Пустое состояние --- */
+.emptyState {
+    text-align: center;
+    padding: 40px 20px;
+    color: #b2bec3;
+    font-size: 15px;
+}
+
+.emptyEmoji {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+/* --- Адаптивность --- */
+@media (max-width: 600px) {
+    .card {
+        padding: 24px 20px;
+    }
+    
+    .card h2 {
+        font-size: 22px;
+    }
+    
+    .inputButton2 {
+        flex-direction: column;
+    }
+    
+    .inputButton2 button {
+        width: 100%;
+    }
+    
+    .border-none {
+        font-size: 14px;
+    }
+    
+    .firstButton,
+    .secondButton {
+        font-size: 12px;
+        padding: 6px 8px !important;
+    }
+}
+
+/* --- Анимация появления --- */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.border-none tbody tr {
+    animation: slideIn 0.3s ease;
+}

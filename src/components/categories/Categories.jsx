@@ -6,7 +6,7 @@ import styles from "../../styles/Categories.module.css";
 
 const Categories = () => {
     const [name, setName] = useState('')
-    const [listCategories, setListCategories] = useState(() => {                  // получаем массив значений
+    const [listCategories, setListCategories] = useState(() => {                  
         const saved = localStorage.getItem('categories');
         return saved ? JSON.parse(saved) : [];
         }); 
@@ -16,7 +16,7 @@ const Categories = () => {
 
         let updatedList;
 
-        if (name) { // если строка name не пустая, null или undefined, то будет записана категория
+        if (name) { 
             updatedList = [  ...listCategories, 
                                     {   categoriesName: name,
                                         creationTime: date.getTime(), 
@@ -43,14 +43,12 @@ const Categories = () => {
     };
 
     const toggleIsEdit = (creationTime) => {
-        // Создаем новый массив, обновляя только нужный элемент
         const updatedList = listCategories.map(category => {
             if (category.creationTime === creationTime) {
                 return { ...category, isEdit: !category.isEdit };  
             }   
             return category;
         });
-        //Обновляем состояние и передаем в localStorage
         setListCategories(updatedList);
         localStorage.setItem(`categories`, JSON.stringify(updatedList));
     }
@@ -77,7 +75,7 @@ const Categories = () => {
                     </table>  
 
     const listOfCategories = () => {
-        if (listCategories.length > 0){     // Проверка, что categories - это массив
+        if (listCategories.length > 0){     
             return listCategories.map((category, i) => 
                 <tr key={i}>
                     <td>
@@ -112,33 +110,44 @@ const Categories = () => {
         }
     }
 
-    return <><div>
-                <button>
-                    <NavLink to="/">На главную</NavLink>
-                </button>
-                <h2>Категории</h2>
+return (
+    <div className={styles.pageWrapper}>
+        <div className={styles.card}>
+            <button>
+                <NavLink to="/">На главную</NavLink>
+            </button>
+            <h2>Категории</h2>
 
-                <div className={styles.title}>Добавить категорию</div>
-                <div className={styles.inputButton}>
-                    <div className={styles.inputButton2}>
-                        <input
-                            id="categoryName"
-                            name="categoryName"
-                            value={name}
-                            onChange={onNameChanged}
-                        />
+            <div className={styles.title}>Добавить категорию</div>
+            <div className={styles.inputButton}>
+                <div className={styles.inputButton2}>
+                    <input
+                        id="categoryName"
+                        name="categoryName"
+                        placeholder="Название категории..."
+                        value={name}
+                        onChange={onNameChanged}
+                    />
 
-                        <button type="button" onClick={onSaveCategoryClick}>
-                            Сохранить
-                        </button>
-                    </div>
-                </div>
-
-                <div className={styles.table}>
-                    {createTable()}
+                    <button type="button" onClick={onSaveCategoryClick}>
+                        Сохранить
+                    </button>
                 </div>
             </div>
-            </>
+
+            <div className={styles.table}>
+                {createTable()}
+            </div>
+            
+            {listCategories.length === 0 && (
+                <div className={styles.emptyState}>
+                    <div className={styles.emptyEmoji}>📂</div>
+                    <div>Пока нет категорий. Добавьте первую!</div>
+                </div>
+            )}
+        </div>
+    </div>
+    )
 }
 
 export default Categories
