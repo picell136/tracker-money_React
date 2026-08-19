@@ -1,12 +1,12 @@
 /* --- Общий фон и карточка --- */
-.pageWrapper {
+/* .pageWrapper {
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: flex-start;
     padding: 40px 20px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+} */
 
 .card {
     background: #ffffff;

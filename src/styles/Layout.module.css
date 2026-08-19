@@ -1,38 +1,59 @@
 .main-container {
     display: flex;
-    height: 100vh;
-    width: 100vw;  
+    min-height: 100vh;
+    width: 100%;
     justify-content: center;
+    align-items: flex-start; 
+    padding: 40px 20px; 
+    overflow-y: auto; 
+    
+    /* Если вы хотите, чтобы градиентный фон был на всей странице, раскомментируйте строку ниже: */
+    /* background: linear-gradient(135deg, #a8e6f0 0%, #d4a5e8 50%, #f5b7c8 100%); */
 }
 
 .container { 
     display: flex;
     flex-direction: column;
-    margin-top: 5%;
-    width: 40%;
+    width: 100%; 
+    max-width: 600px; 
     text-align: center;
 }
 
 .header {
     display: flex;
     align-items: center;
+    justify-content: flex-start; 
     gap: 12px;
     margin-bottom: 24px;
 }
 
 .header-icon {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     background: linear-gradient(135deg, #f093fb, #f5576c);
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    font-size: 22px;
+    flex-shrink: 0; /* Чтобы иконка не сжималась на маленьких экранах */
 }
 
 .header h1 {
-    font-size: 27px;
+    font-size: 24px;
     color: #2d3436;
     font-weight: 700;
+    margin: 0;
+    text-align: left;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 600px) {
+    .main-container {
+        padding: 20px 16px;
+    }
+    
+    .header h1 {
+        font-size: 20px;
+    }
 }

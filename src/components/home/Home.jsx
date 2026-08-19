@@ -113,7 +113,6 @@ const Home = () => {
     }, [filtered])
 
     return (
-        <div className={styles.pageWrapper}>
             <div className={styles.card}>
 
                 {/* Навигация по датам */}
@@ -259,7 +258,6 @@ const Home = () => {
                     </div>
                 )}
             </div>
-        </div>
     )
 }
 
