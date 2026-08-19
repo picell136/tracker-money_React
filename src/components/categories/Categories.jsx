@@ -111,7 +111,6 @@ const Categories = () => {
     }
 
 return (
-    <div className={styles.pageWrapper}>
         <div className={styles.card}>
             <button>
                 <NavLink to="/">На главную</NavLink>
@@ -146,7 +145,6 @@ return (
                 </div>
             )}
         </div>
-    </div>
     )
 }
 
