@@ -1,35 +1,31 @@
 html, body, #root {
-    margin: 0;
     padding: 0;
+    margin: 0;
     width: 100%;
+    min-height: 100vh;
     box-sizing: border-box;
 }
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #a8e6f0 0%, #d4a5e8 50%, #f5b7c8 100%);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 40px 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #a8e6f0 0%, #d4a5e8 50%, #f5b7c8 100%);
+    background-attachment: fixed; 
+    min-height: 100vh; 
 }
 
 h1 {
-  color:rgb(51, 51, 51);
+    color: rgb(51, 51, 51);
 }
 
 button {
-  border-radius: 25px;
-  border: none;
+    border-radius: 25px;
+    border: none;
 }
 
 button:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
