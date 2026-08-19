@@ -20,6 +20,7 @@
     align-items: center;
     gap: 12px;
     margin-bottom: 24px;
+    margin-left: 40px;
     flex-shrink: 0;
 }
 
