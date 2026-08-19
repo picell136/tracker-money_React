@@ -1,129 +1,304 @@
-.navigation {
+/* --- Общий фон и карточка --- */
+.pageWrapper {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 520px;
+    padding: 32px 28px;
+}
+
+/* --- Навигация по датам --- */
+.dateNav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.navBtn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    background: #dfe6e9;
+    color: #636e72;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.navBtn.next {
+    background: #f5b7c8;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(245, 183, 200, 0.5);
+}
+
+.navBtn:hover {
+    transform: scale(1.1);
+}
+
+.dateLabel {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2d3436;
+    text-align: center;
+}
+
+/* --- Вкладки --- */
+.tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.tabBtn {
+    flex: 1;
+    padding: 12px 0;
+    border-radius: 25px;
+    border: none;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tabBtn:hover {
+    transform: translateY(-2px);
+}
+
+.tabCategories {
+    background: linear-gradient(135deg, #f6d365, #fda085);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(253, 160, 133, 0.4);
+}
+
+.tabStats {
+    background: linear-gradient(135deg, #a8edea, #88d8b0);
+    color: #2d3436;
+    box-shadow: 0 4px 15px rgba(136, 216, 176, 0.4);
+}
+
+/* --- Форма добавления --- */
+.addForm {
+    margin-bottom: 28px;
+}
+
+.formRow {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.formInput, .formSelect {
+    flex: 1;
+    padding: 14px 18px;
+    border: 2px solid #f0f0f0;
+    border-radius: 16px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.3s, background 0.3s;
+    background: #fafafa;
+    color: #2d3436;
+}
+
+.formInput:focus, .formSelect:focus {
+    border-color: #f5b7c8;
+    background: #fff;
+}
+
+.btnAdd {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #f5576c, #ff6b6b);
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 6px 20px rgba(245, 87, 108, 0.35);
+    margin-top: 8px;
+}
+
+.btnAdd:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(245, 87, 108, 0.45);
+}
+
+.btnAdd:active {
+    transform: translateY(0);
+}
+
+/* --- Список записей --- */
+.expensesList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.expenseItem {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    background: #f8f9fa;
+    border-radius: 16px;
+    transition: background 0.2s;
+    animation: slideIn 0.3s ease;
+}
+
+.expenseItem:hover {
+    background: #f0f0f0;
+}
+
+.expenseEmoji {
+    font-size: 24px;
+    margin-right: 12px;
+}
+
+.expenseInfo {
+    flex: 1;
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    margin: 5%;
-}
-
-.icon-arrow:hover {
-    opacity: 0.5;
-    cursor: pointer;
-}
-
-.date {
-    font-size: 20px;
-    margin-top: 10px;
-    font-weight: 700;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-
-.buttons {
-    display: flex;
-    justify-content: center;
     align-items: center;
-    width: 100%; 
+    gap: 12px;
 }
 
-.buttons2 {
+.expenseName {
+    font-size: 17px;
+    color: #2d3436;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+}
+
+.expenseBadge {
+    display: inline-block;
+    padding: 4px 12px;
+    background-color: #636e72;
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    width: fit-content;
+    flex-shrink: 0;
+}
+
+.expenseRight {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.expenseAmount {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2d3436;
+}
+
+.actionBtns {
+    display: flex;
+    gap: 8px;
+}
+
+.actionBtn {
+    background: #fff;
+    border: 1px solid #dfe6e9;
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.actionBtn:hover {
+    background: #f0f0f0;
+    transform: scale(1.1);
+}
+
+.deleteBtn:hover {
+    background: #ffe0e0;
+    border-color: #ff6b6b;
+}
+
+.deleteBtn svg {
+    color: #ff6b6b;
+}
+
+/* --- Поля редактирования --- */
+.editInput, .editSelect, .editInputCost {
+    padding: 6px 10px;
+    border: 2px solid #f5b7c8;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    background: #fff;
     width: 40%;
 }
 
-.title {
-    margin: 7px;
-    font-size: large;
+.editInputCost {
+    width: 80px;
+    text-align: right;
+}
+
+/* --- Пустое состояние --- */
+.emptyState {
+    text-align: center;
+    padding: 30px;
+    color: #b2bec3;
+    font-size: 15px;
+}
+
+.emptyEmoji {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+/* --- Итого --- */
+.totalBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #f5576c, #ff6b6b);
+    border-radius: 16px;
+    color: #fff;
+    margin-top: 8px;
+}
+
+.totalLabel {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.totalAmount {
+    font-size: 22px;
     font-weight: 700;
 }
 
-.inputsAndSelect {
-    display: flex;
-	justify-content:space-evenly;
-    height: 30px;
-    margin: 10px;
-}
-
-.inputsAndSelect input {
-    border-radius: 5px;
-    border: none;
-}
-
-.border-none {
-  border-collapse: collapse;
-  border: none;
-  padding: 15px;
-  font-size: 20px;
-
-  table-layout: fixed;
-  width: 100%; 
-
-  word-break: break-word;
-}
-
-.table th {
-  padding: 5px;
-  border: 1px solid black;
-}
-
-.table td {
-  padding: 3px;
-  width: 20%; 
-  word-wrap: break-word; 
-}
-
-.table input {
-    width: 80%;
-}
-
-.border-none tr:first-child th {
-  border-top: none;
-}
-
-
-
-.border-none tr th:first-child {
-  border-left: none;
-}
-
-
-.border-none td {
-  border: 1px solid rgb(82, 82, 82);
-}
-
-.border-none tr:first-child td {
-  border-top: 3px solid black;
-}
-
-.border-none tr:last-child td {
-  border-bottom: none;
-}
-
-.border-none tr td:first-child {
-  border-left: none;
-}
-
-.border-none tr td:last-child {
-  border-right: none;
-}
-
-
-
-
-.purchase {
-    position: relative;
-    left: 0;
-}
-
-.cost {
-    position: absolute; 
-}
-
-.edit {
-    cursor: pointer;
-    font-size: medium;
-}
-
-.delete {
-    cursor: pointer;
+/* --- Анимация --- */
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }

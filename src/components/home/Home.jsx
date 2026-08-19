@@ -1,346 +1,266 @@
-import { useState } from 'react'
-// import { useSelector } from 'react-redux'
+import { useState, useMemo } from 'react'
 import { NavLink } from 'react-router-dom'
-
-import styles from "../../styles/Home.module.css"; 
-
-import rightArrow from '../../images/arrow-circle-right.svg'
-import leftArrow from '../../images/arrow-circle-left.svg'
+import { ChevronLeft, ChevronRight, Trash2, Edit2, Check, X } from 'lucide-react'
+import styles from "../../styles/Home.module.css"
 
 const Home = () => {
-
-    let date  = new Date();
-    let year  = date.getFullYear();
-    let month = date.getMonth();
-    let day = date.getDate();
-
-    const [displayDay, setDisplayDay] = useState(day);
-    const [displayMonth, setDisplayMonth] = useState(month);
-    const [displayYear, setDisplayYear] = useState(year);
-
-    function prevDay() {
-        if (displayDay === 1) {
-            if (displayMonth === 0) {
-                setDisplayYear(displayYear - 1)
-                setDisplayMonth(11)
-                setDisplayDay(getLastDayofMonth()) 
-            } else {
-                setDisplayMonth(displayMonth - 1)
-                setDisplayDay(getLastDayofMonth())                
-            }               
-        } else {
-            setDisplayDay(displayDay - 1) 
-        }
-    }
-
-    function nextDay() {
-        let date = new Date(displayYear, displayMonth, displayDay); // выясняем дату показанную на экране
-        let lastDay = new Date(displayYear, displayMonth + 1, -1);  // посл. день след. месяца даты, показанной на экране
-
-        if (date.getDate() == lastDay.getDate() + 1) { // если дата на экране равна последнему дню месяца, то идёт переход на 1е число след. месяца
-            setDisplayDay(1)
-            setDisplayMonth(displayMonth + 1)
-            if (displayMonth === 11){
-                setDisplayMonth(0)
-                setDisplayYear(displayYear + 1)
-            }
-        } else {
-            setDisplayDay(displayDay + 1)  
-        }
-    }
-
-
-    // последний день месяца
-    function getLastDayofMonth(){
-        let date = new Date(displayYear, displayMonth, 0);
-        return date.getDate()
-    }
-
-    function convertMonths(displayMonth){
-        let months = [  'января', 'февраля', 'марта', 'апреля', 
-                        'мая', 'июня', 'июля', 'августа', 
-                        'сентября', 'октября', 'ноября', 'декабря']
-        return months[displayMonth]
-    }
-
+    const today = new Date()
+    const [displayDay, setDisplayDay] = useState(today.getDate())
+    const [displayMonth, setDisplayMonth] = useState(today.getMonth())
+    const [displayYear, setDisplayYear] = useState(today.getFullYear())
 
     const [name, setName] = useState('')
     const [category, setCategory] = useState('')
     const [cost, setCost] = useState('')
 
-    const [listPurchases, setListPurchases] = useState(() => {                  // массив для всех значений за один день
-        const saved = localStorage.getItem('purchases');
-        return saved ? JSON.parse(saved) : [];
-      }); 
+    const [listPurchases, setListPurchases] = useState(() => {
+        const saved = localStorage.getItem('purchases')
+        return saved ? JSON.parse(saved) : []
+    })
 
-    const [listCategories] = useState(() => {                  // массив для всех значений за один день
-        const saved = localStorage.getItem('categories');
-        return saved ? JSON.parse(saved) : [];
-      });   
+    const [listCategories] = useState(() => {
+        const saved = localStorage.getItem('categories')
+        return saved ? JSON.parse(saved) : []
+    })
 
-    const onNameChanged = (e) => setName(e.target.value)
-    const onCategoryChanged = (e) => setCategory(e.target.value)
-    const onCostChanged = (e) => setCost(e.target.value)
+    // --- Логика дат ---
+    const getLastDayofMonth = (year, month) => new Date(year, month + 1, 0).getDate()
 
-    const onSavePurchaseClick = () => {
-        let date = new Date();
-
-        let noteDate = `${displayDay}-${displayMonth}-${displayYear}`
-
-        if (name && category && cost) {
-        const updatedList = [  ...listPurchases, 
-                                {   purchaseName: name, 
-                                    categoriesName: category,
-                                    costValue: cost,
-                                    date: noteDate,
-                                    creationTime: date.getTime(), 
-                                    isEdit: false 
-                                }
-                            ]
-            setListPurchases(updatedList);
-            localStorage.setItem(`purchases`, JSON.stringify(updatedList));
-        }
-    }
-
-    const categoriesList = () => {
-        if (listCategories.length > 0){     // Проверка, что categories - это массив
-            return listCategories.map((category, i) => 
-                <option key={i} value={category.categoriesName}>
-                    {category.categoriesName}
-                </option>
-        )
+    const prevDay = () => {
+        if (displayDay === 1) {
+            if (displayMonth === 0) {
+                setDisplayYear(displayYear - 1)
+                setDisplayMonth(11)
+                setDisplayDay(getLastDayofMonth(displayYear - 1, 11))
+            } else {
+                setDisplayMonth(displayMonth - 1)
+                setDisplayDay(getLastDayofMonth(displayYear, displayMonth - 1))
+            }
         } else {
-            return null
+            setDisplayDay(displayDay - 1)
         }
     }
 
-    // Функция переключения isEdit
-    const toggleIsEdit = (creationTime) => {
-
-        let input = document.getElementById(creationTime)
-
-        // Создаем новый массив, обновляя только нужный элемент
-        const updatedList = listPurchases.map(purchase => {
-            if (purchase.creationTime === creationTime) {
-
-                input.value = purchase.value // в инпут попадает значение текста
-
-                return { ...purchase, isEdit: !purchase.isEdit };  
-            }   
-            return purchase;
-        });
-        //Обновляем состояние и передаем в localStorage
-        setListPurchases(updatedList);
-        localStorage.setItem(`purchases`, JSON.stringify(updatedList));
+    const nextDay = () => {
+        const lastDay = getLastDayofMonth(displayYear, displayMonth)
+        if (displayDay === lastDay) {
+            setDisplayDay(1)
+            if (displayMonth === 11) {
+                setDisplayMonth(0)
+                setDisplayYear(displayYear + 1)
+            } else {
+                setDisplayMonth(displayMonth + 1)
+            }
+        } else {
+            setDisplayDay(displayDay + 1)
+        }
     }
 
-    // Функция для обновления значения заметки при редактировании
-    const handleEditChange_1 = (creationTime, newValue) => {
-        const updatedList = listPurchases.map(purchase => {
-            if (purchase.creationTime === creationTime) {
-                return { ...purchase, purchaseName: newValue };
-            }
-            return purchase;
-        });
-        setListPurchases(updatedList);
-        localStorage.setItem('purchases', JSON.stringify(updatedList));
-    };
+    const convertMonths = (m) => {
+        const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+        return months[m]
+    }
 
-    const handleEditChange_2 = (creationTime, newValue) => {
-        console.log(newValue);
-        const updatedList = listPurchases.map(purchase => {
-            if (purchase.creationTime === creationTime) {
-                return { ...purchase, categoriesName: newValue };
-            }
-            return purchase;
-        });
-        setListPurchases(updatedList);
-        localStorage.setItem('purchases', JSON.stringify(updatedList));
-    };
+    // --- Логика покупок ---
+    const onSavePurchaseClick = () => {
+        if (!name || !category || !cost) return
 
+        const noteDate = `${displayDay}-${displayMonth}-${displayYear}`
+        const newPurchase = {
+            purchaseName: name,
+            categoriesName: category,
+            costValue: Number(cost),
+            date: noteDate,
+            creationTime: Date.now(),
+            isEdit: false
+        }
 
-    // Функция для обновления значения заметки при редактировании
-    const handleEditChange_3 = (creationTime, newValue) => {
-        const updatedList = listPurchases.map(purchase => {
-            if (purchase.creationTime === creationTime) {
-                return { ...purchase, costValue: newValue };
-            }
-            return purchase;
-        });
-        setListPurchases(updatedList);
-        localStorage.setItem('purchases', JSON.stringify(updatedList));
-    };
+        const updatedList = [...listPurchases, newPurchase]
+        setListPurchases(updatedList)
+        localStorage.setItem('purchases', JSON.stringify(updatedList))
+        
+        setName('')
+        setCategory('')
+        setCost('')
+    }
 
-    // Функция удаления заметки
+    const toggleIsEdit = (creationTime) => {
+        const updatedList = listPurchases.map(p => 
+            p.creationTime === creationTime ? { ...p, isEdit: !p.isEdit } : p
+        )
+        setListPurchases(updatedList)
+        localStorage.setItem('purchases', JSON.stringify(updatedList))
+    }
+
+    const handleEditChange = (creationTime, field, newValue) => {
+        const updatedList = listPurchases.map(p => 
+            p.creationTime === creationTime ? { ...p, [field]: newValue } : p
+        )
+        setListPurchases(updatedList)
+        localStorage.setItem('purchases', JSON.stringify(updatedList))
+    }
+
     const deletePurchase = (creationTime) => {
-        const updatedList = listPurchases.filter(purchase => purchase.creationTime !== creationTime);    // Метод filter перебирает массив list и применяет функцию к каждому элементу. 
-        setListPurchases(updatedList);                                                           // Он возвращает только заметки, идентификаторы которых не совпадают с указанным идентификатором creationTime, фактически удалив выбранную заметку. 
-        localStorage.setItem('purchases', JSON.stringify(updatedList));
-    };
+        const updatedList = listPurchases.filter(p => p.creationTime !== creationTime)
+        setListPurchases(updatedList)
+        localStorage.setItem('purchases', JSON.stringify(updatedList))
+    }
 
-    // Фильтруем по дате
-    let filtered = listPurchases.filter(purchase => purchase.date === `${displayDay}-${displayMonth}-${displayYear}`);
+    const filtered = listPurchases.filter(p => p.date === `${displayDay}-${displayMonth}-${displayYear}`)
     
-    let createTable = () => filtered.length === 0 ?
-                        null :
-                        <table className={styles["border-none"]}>
-                            <thead>
-                                <tr>
-                                    <th>Название</th>
-                                    <th>Категория</th>
-                                    <th>Стоимость</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {listOfPurchases()}
-                            </tbody>
-                        </table>      
+    const totalCost = useMemo(() => {
+        return filtered.reduce((sum, item) => sum + Number(item.costValue), 0)
+    }, [filtered])
 
-    let listOfPurchases = () => filtered.length === 0 ? 
-                            null : 
-                            filtered.map((elem, i) => { 
-                                return  <tr key={i}>
-                                            <td>
-                                                 {!elem.isEdit ? 
-                                                    <span    
-                                                        style={{
-                                                            visibility: !elem.isEdit ? 'visible' : 'hidden'
-                                                            }}
-                                                    > 
-                                                        {elem.purchaseName}
-                                                    </span>
-                                                 :
-                                                    <input
-                                                        className={styles.purchase}
-                                                        id={elem.creationTime}  // Генерируем для каждого инпута свой id
-                                                        style={{
-                                                            visibility: elem.isEdit ? 'visible' : 'hidden'
-                                                        }}
-                                                        value={elem.purchaseName}
-                                                        onChange={(e) => handleEditChange_1(elem.creationTime, e.target.value)} // Функция срабатывающая каждый раз при новом значении
-                                                    />
-                                                 }   
-                                            </td>
-                                            <td>
-                                                {!elem.isEdit ? 
-                                                    <span
-                                                    className={styles.category}
-                                                    style={{
-                                                        visibility: !elem.isEdit ? 'visible' : 'hidden'
-                                                        }}
-                                                    >
-                                                    {elem.categoriesName}
-                                                    </span>
-                                                :
-                                                    <select 
-                                                        value={elem.categoriesName} 
-                                                        onChange={(e) => handleEditChange_2(elem.creationTime, e.target.value)}
-                                                        style={{
-                                                            visibility: elem.isEdit ? 'visible' : 'hidden'
-                                                            }}    
-                                                    >
-                                                        {listCategories.map((option, i) => (
-                                                            <option key={i} value={option.categoriesName}>
-                                                                {option.categoriesName}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                }
-                                            </td>
-                                            <td>
-                                                <span    
-                                                    className={styles.cost}
-                                                    style={{
-                                                        visibility: !elem.isEdit ? 'visible' : 'hidden'
-                                                        }}
-                                                > 
-                                                    {elem.costValue} ₽
-                                                </span>
-                                                <input
-                                                    id={elem.creationTime}  // Генерируем для каждого инпута свой id
-                                                    style={{
-                                                        visibility: elem.isEdit ? 'visible' : 'hidden'
-                                                    }}
-                                                    value={elem.costValue}
-                                                    
-                                                    onChange={(e) => handleEditChange_3(elem.creationTime, e.target.value)} // Функция срабатывающая каждый раз при новом значении
-                                                />
-                                            </td>
-                                            <td
-                                                className={styles.edit}
-                                                onClick={() => toggleIsEdit(elem.creationTime)} 
-                                            >    
-                                                {elem.isEdit ? 'Сохранить' : 'Редактировать'}
-                                            </td>
-                                            <td 
-                                                className={styles.delete}
-                                                onClick={() => deletePurchase(elem.creationTime)}
-                                            >
-                                                Удалить
-                                            </td>
-                                        </tr>
-                            })
-    
+    return (
+        <div className={styles.pageWrapper}>
+            <div className={styles.card}>
 
-    return <>
-            <div>
-                <div className={styles.navigation}>
-                    <span className={styles["icon-arrow"]} onClick={prevDay}>
-                        <img src={leftArrow} alt="Arrow circle icon" width="50" height="50"/>
+                {/* Навигация по датам */}
+                <div className={styles.dateNav}>
+                    <button className={`${styles.navBtn} ${styles.prev}`} onClick={prevDay}>
+                        <ChevronLeft size={24} />
+                    </button>
+                    <span className={styles.dateLabel}>
+                        {displayDay} {convertMonths(displayMonth)} {displayYear}
                     </span>
-                    <div className={styles.date}> {displayDay} {convertMonths(displayMonth)} {displayYear} года </div>
-                    <span className={styles["icon-arrow"]} onClick={nextDay}>
-                        <img src={rightArrow} alt="Arrow circle icon" width="50" height="50"/>
-                    </span>
+                    <button className={`${styles.navBtn} ${styles.next}`} onClick={nextDay}>
+                        <ChevronRight size={24} />
+                    </button>
                 </div>
 
-                <div className={styles.buttons} >  
-                    <div className={styles.buttons2}>      
-                        <button>
-                            <NavLink to="/categories">Категории</NavLink>
-                        </button>
+                {/* Вкладки */}
+                <div className={styles.tabs}>
+                    <NavLink to="/categories" className={({ isActive }) => `${styles.tabBtn} ${styles.tabCategories} ${isActive ? styles.active : ''}`}>
+                        Категории
+                    </NavLink>
+                    <NavLink to="/stat" className={({ isActive }) => `${styles.tabBtn} ${styles.tabStats} ${isActive ? styles.active : ''}`}>
+                        Статистика
+                    </NavLink>
+                </div>
 
-                        <button>
-                            <NavLink to="/stat">Статистика</NavLink>
-                        </button>
-                    </div>  
-                </div>  
-
-                <div className={styles.title}>Добавить покупку</div>
-                <div className={styles.inputsAndSelect}>                    
+                {/* Форма добавления */}
+                <div className={styles.addForm}>
+                    <div className={styles.formRow}>
                         <input
-                            id="purchaseName"
-                            name="purchasetName"
-                            placeholder='Название'
+                            className={styles.formInput}
+                            placeholder="Название покупки..."
                             value={name}
-                            onChange={onNameChanged}
+                            onChange={(e) => setName(e.target.value)}
                         />
-
-                        <select id="category" value={category} onChange={onCategoryChanged}>
-                            <option value=""> - Выберите категорию - </option>
-                            {categoriesList()}
+                    </div>
+                    <div className={styles.formRow}>
+                        <select 
+                            className={styles.formSelect} 
+                            value={category} 
+                            onChange={(e) => setCategory(e.target.value)}
+                        >
+                            <option value="">Выберите категорию</option>
+                            {listCategories.map((cat, i) => (
+                                <option key={i} value={cat.categoriesName}>{cat.categoriesName}</option>
+                            ))}
                         </select>
-
-                    <input
-                        type="number" // сделать ограничение, только цифры
-                        id="costValue"
-                        name="costValue"
-                        placeholder='Стоимость'
-                        value={cost}
-                        onChange={onCostChanged}
-                    />
-
-                    <button type="button" onClick={onSavePurchaseClick}>
+                        <input
+                            className={styles.formInput}
+                            type="number"
+                            placeholder="Сумма (₽)"
+                            value={cost}
+                            onChange={(e) => setCost(e.target.value)}
+                            style={{ maxWidth: '140px' }}
+                        />
+                    </div>
+                    <button className={styles.btnAdd} onClick={onSavePurchaseClick}>
                         Добавить
                     </button>
                 </div>
-                <div>
+
+                {/* Список записей */}
+                <div className={styles.expensesList}>
+                    {filtered.length === 0 ? (
+                        <div className={styles.emptyState}>
+                            <div className={styles.emptyEmoji}>📝</div>
+                            <div>Пока нет записей. Добавьте первую!</div>
+                        </div>
+                    ) : (
+                        filtered.map((elem) => {
+                            return (
+                                <div key={elem.creationTime} className={styles.expenseItem}>
+                                    
+                                   <div className={styles.expenseInfo}>
+                                        {elem.isEdit ? (
+                                            <input
+                                                className={styles.editInput}
+                                                value={elem.purchaseName}
+                                                onChange={(e) => handleEditChange(elem.creationTime, 'purchaseName', e.target.value)}
+                                                style={{ flex: 1, minWidth: 0 }}
+                                            />
+                                        ) : (
+                                            <span className={styles.expenseName}>{elem.purchaseName}</span>
+                                        )}
+                                        
+                                        {elem.isEdit ? (
+                                            <select
+                                                className={styles.editSelect}
+                                                value={elem.categoriesName}
+                                                onChange={(e) => handleEditChange(elem.creationTime, 'categoriesName', e.target.value)}
+                                                style={{ flexShrink: 0 }}
+                                            >
+                                                {listCategories.map((cat, i) => (
+                                                    <option key={i} value={cat.categoriesName}>{cat.categoriesName}</option>
+                                                ))}
+                                            </select>
+                                        ) : (
+                                            <span className={`${styles.expenseBadge}`}>
+                                                {elem.categoriesName}
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    <div className={styles.expenseRight}>
+                                        {elem.isEdit ? (
+                                            <input
+                                                className={styles.editInputCost}
+                                                type="number"
+                                                value={elem.costValue}
+                                                onChange={(e) => handleEditChange(elem.creationTime, 'costValue', e.target.value)}
+                                            />
+                                        ) : (
+                                            <span className={styles.expenseAmount}>{Number(elem.costValue).toLocaleString()} ₽</span>
+                                        )}
+                                        
+                                        <div className={styles.actionBtns}>
+                                            <button 
+                                                className={styles.actionBtn} 
+                                                onClick={() => elem.isEdit ? toggleIsEdit(elem.creationTime) : toggleIsEdit(elem.creationTime)}
+                                                title={elem.isEdit ? "Сохранить" : "Редактировать"}
+                                            >
+                                                {elem.isEdit ? <Check size={18} color="#2d3436" /> : <Edit2 size={16} />}
+                                            </button>
+                                            <button 
+                                                className={`${styles.actionBtn} ${styles.deleteBtn}`} 
+                                                onClick={() => deletePurchase(elem.creationTime)}
+                                                title="Удалить"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        })
+                    )}
                 </div>
-                <div className={styles.table}>
-                        {createTable()}
-                </div>
+
+                {/* Итого */}
+                {filtered.length > 0 && (
+                    <div className={styles.totalBar}>
+                        <span className={styles.totalLabel}>Итого за день:</span>
+                        <span className={styles.totalAmount}>{totalCost.toLocaleString()} ₽</span>
+                    </div>
+                )}
             </div>
-        </>
+        </div>
+    )
 }
 
 export default Home

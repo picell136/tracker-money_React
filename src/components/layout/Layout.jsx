@@ -10,7 +10,10 @@ const HomePage = () => {
     return <>
             <div className={styles['main-container']}>
                 <div className={styles.container}>
-                    <h1>Журнал расхода денег</h1>
+                    <div className={styles.header}>
+                        <div className={styles['header-icon']}>💰</div>
+                        <h1>Журнал расхода денег</h1>
+                    </div>
                     <Outlet />
                 </div>
             </div>
