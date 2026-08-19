@@ -1,22 +1,21 @@
 .main-container {
     display: flex;
     min-height: 100vh;
-    width: 100%;
+    width: 100%;   
     justify-content: center;
-    align-items: flex-start; 
-    padding: 40px 20px; 
-    overflow-y: auto; 
-    
-    /* Если вы хотите, чтобы градиентный фон был на всей странице, раскомментируйте строку ниже: */
-    /* background: linear-gradient(135deg, #a8e6f0 0%, #d4a5e8 50%, #f5b7c8 100%); */
+    align-items: flex-start;
+    padding: 40px 20px 60px 20px; /* Увеличен нижний отступ */
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 
 .container { 
     display: flex;
     flex-direction: column;
-    width: 100%; 
-    max-width: 600px; 
+    width: 100%;
+    max-width: 600px;
     text-align: center;
+    margin-bottom: 40px; /* Отступ снизу от карточки */
 }
 
 .header {
