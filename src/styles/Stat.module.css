@@ -1,64 +1,305 @@
-
-a {
-  text-decoration: none;
+/* --- Общий фон и карточка --- */
+.card {
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 560px;
+    padding: 32px 28px;
 }
 
-.content {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+/* --- Шапка --- */
+.header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
 }
 
-.title {
-  font-size: 17px;
-  font-weight: 600;
+.backButton {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #f5b7c8, #f093fb);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(245, 183, 200, 0.4);
+    border: none;
+    cursor: pointer;
 }
 
-.selects {
-  display: flex;
+.backButton:hover {
+    transform: scale(1.1);
 }
 
-.selects_text {
-  padding: 4px;
+.headerContent {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
 }
 
-
-/**/
-
-
-.text {
-  padding: 10px;
-  font-size: 20px;
+.headerIcon {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
 }
 
-.table th {
-  padding: 5px;
-  border: 1px solid black;
+.card h2 {
+    font-size: 24px;
+    color: #2d3436;
+    font-weight: 700;
+    margin: 0;
 }
 
-.table td {
-  padding: 5px;
+/* --- Секция выбора периода --- */
+.periodSection {
+    background: linear-gradient(135deg, #f8f9fa, #fff);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 2px solid #f0f0f0;
 }
 
-.border-none {
-  border-collapse: collapse;
-  border: none;
-  padding: 15px;
-  font-size: 25px;
+.formGroup {
+    margin-bottom: 20px;
 }
 
-.border-none tr:first-child th {
-  border-top: none;
+.label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #636e72;
+    margin-bottom: 8px;
 }
 
-.border-none tr:last-child th {
-  border-bottom: none;
+.select {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #f0f0f0;
+    border-radius: 16px;
+    font-size: 15px;
+    background: #fafafa;
+    color: #2d3436;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.3s;
 }
 
-.border-none tr th:first-child {
-  border-left: none;
+.select:focus {
+    border-color: #f5b7c8;
 }
 
-.border-none tr th:last-child {
-  border-right: none;
+/* Выбор дат */
+.dateRange {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.dateRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.dateLabel {
+    font-size: 15px;
+    font-weight: 600;
+    color: #636e72;
+    min-width: 30px;
+}
+
+.dateSelect {
+    padding: 10px 14px;
+    border: 2px solid #f0f0f0;
+    border-radius: 12px;
+    font-size: 14px;
+    background: #fff;
+    color: #2d3436;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.3s;
+    flex: 1;
+    min-width: 60px;
+}
+
+.dateSelect:focus {
+    border-color: #a8edea;
+}
+
+/* --- Секция результатов --- */
+.resultsSection {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.totalCard {
+    background: linear-gradient(135deg, #f5576c, #ff6b6b);
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: #fff;
+    box-shadow: 0 8px 25px rgba(245, 87, 108, 0.35);
+}
+
+.totalIcon {
+    width: 56px;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.totalInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.totalLabel {
+    font-size: 15px;
+    font-weight: 500;
+    opacity: 0.95;
+}
+
+.totalAmount {
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.totalSublabel {
+    font-size: 14px;
+    opacity: 0.85;
+}
+
+/* Категории */
+.categoriesSection {
+    background: linear-gradient(135deg, #f8f9fa, #fff);
+    border: 2px solid #f0f0f0;
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.sectionTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2d3436;
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.categoriesList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.categoryItem {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    border: 2px solid #f0f0f0;
+    transition: transform 0.2s;
+}
+
+.categoryItem:hover {
+    transform: translateY(-2px);
+    border-color: #e0e0e0;
+}
+
+.categoryHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.categoryName {
+    font-size: 15px;
+    font-weight: 600;
+    color: #2d3436;
+}
+
+.categoryPercent {
+    font-size: 14px;
+    font-weight: 700;
+    color: #636e72;
+}
+
+.progressBar {
+    height: 10px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progressFill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.categoryAmount {
+    font-size: 16px;
+    font-weight: 700;
+    color: #2d3436;
+    text-align: right;
+}
+
+/* Пустое состояние */
+.emptyState {
+    text-align: center;
+    padding: 40px 20px;
+    color: #b2bec3;
+    font-size: 16px;
+}
+
+.emptyEmoji {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    .card {
+        padding: 24px 20px;
+    }
+    
+    .card h2 {
+        font-size: 20px;
+    }
+    
+    .totalAmount {
+        font-size: 26px;
+    }
+    
+    .dateRow {
+        justify-content: flex-start;
+    }
+    
+    .dateSelect {
+        min-width: 50px;
+        padding: 8px 6px;
+        font-size: 13px;
+    }
 }

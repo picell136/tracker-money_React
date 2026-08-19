@@ -1,318 +1,236 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { NavLink } from 'react-router-dom'
-
-import styles from "../../styles/Stat.module.css"; 
+import { ArrowLeft, Calendar, TrendingUp, PieChart } from 'lucide-react'
+import styles from "../../styles/Stat.module.css"
 
 const Stat = () => {
-
-  let date  = new Date();
-  let year  = date.getFullYear();
-  let month = date.getMonth();
-  let day = date.getDate();
-
-  const options = [
-    {value: '', text: '--Выберите период--'},
-    {value: 'День', text: 'День'},
-    {value: 'Неделя', text: 'Неделя'},
-    {value: 'Месяц', text: 'Месяц'},
-    {value: 'Год', text: 'Год'}
-  ];
-
-  const [selected, setSelected] = useState(options[0].value);
-
-  const [selectedDay_1, setSelectedDay_1] = useState(date.getDate());
-  const [selectedMonth_1, setSelectedMonth_1] = useState(date.getMonth());
-  const [selectedYear_1, setSelectedYear_1] = useState(date.getFullYear());
-  const [selectedDay_2, setSelectedDay_2] = useState(date.getDate());
-  const [selectedMonth_2, setSelectedMonth_2] = useState(date.getMonth());
-  const [selectedYear_2, setSelectedYear_2] = useState(date.getFullYear()); 
-
-  const [result, setResult] = useState('');
-
-  const [listPurchases] = useState(() => {                  // массив для всех значений 
-    const saved = localStorage.getItem('purchases');
-    return saved ? JSON.parse(saved) : [];
-  }); 
-
-  // Получаем все даты текущей недели 
-  function datesOfWeek(current) {
-    let week = []; 
-    // Начинаем с понедельника
-    current.setDate((current.getDate() - current.getDay() +1)); // Текущий день месяца минус текущий день недели +1 
-    for (let i = 0; i < 7; i++) {
-        week.push(
-            `${current.getDate()}-${current.getMonth()}-${current.getFullYear()}`
-        ); 
-        current.setDate(current.getDate() +1);
-    }
-    return week; 
-  }
-
-  // Получаем все даты текущего месяца 
-  function datesOfMonth(current) {
-    let month = []; 
-    let daysInMonth = new Date(date.getFullYear(),date.getMonth() + 1,0).getDate(); // кол-во дней в текущем месяце
-
-    for (let i = 1; i <= daysInMonth; i++) {
-        month.push(
-            `${i}-${current.getMonth()}-${current.getFullYear()}`
-        ); 
-    }
-    return month; 
-  }  
-
-  // Получаем все даты текущего года 
-  function datesOfYear(current) {
-    let year = []; 
-
-    for (let i = 0; i <= 11; i++) {
-        let daysInMonth = new Date(date.getFullYear(), i + 1,0).getDate(); // кол-во дней по месяцам
-      for (let k = 1; k <= daysInMonth; k++) {
-        year.push(
-            `${k}-${i}-${current.getFullYear()}`
-        ); 
-      }
-    }
-    return year; 
-  }  
-
-  const handleChange = (event) => {
-    let sum = 0;
-    if (event.target.value === "День") {
-      let today = `${day}-${month}-${year}`
-      let res = listPurchases.filter(item => item.date === today)
-      for (let elem of res) {
-        sum += +elem.costValue;
-      }
-      setSelected(event.target.value)
-      setResult(sum)
-    } else if (event.target.value === "Неделя") {
-      let week = datesOfWeek(date)
-      for (let elem of week) {
-        let res = listPurchases.filter(item => item.date === elem)
-        for (let elem of res) {
-          sum += +elem.costValue;
-        }
-      }
-      setSelected(event.target.value)
-      setResult(sum)
-    } else if (event.target.value === "Месяц") {
-      let month = datesOfMonth(date)
-      for (let elem of month) {
-        let res = listPurchases.filter(item => item.date === elem)
-        for (let elem of res) {
-          sum += +elem.costValue;
-        }
-      }
-      setSelected(event.target.value)
-      setResult(sum)
-    } else if (event.target.value === "Год") {
-      let year = datesOfYear(date)
-      for (let elem of year) {
-        let res = listPurchases.filter(item => item.date === elem)
-        for (let elem of res) {
-          sum += +elem.costValue;
-        }
-      }
-      setSelected(event.target.value)
-      setResult(sum)
-    }
-  };
-
+  const today = new Date()
   
-  // Делаем выбор опред. отрезка времени // 
+  const [selectedPeriod, setSelectedPeriod] = useState('custom')
+  
+  const [startDay, setStartDay] = useState(today.getDate())
+  const [startMonth, setStartMonth] = useState(today.getMonth())
+  const [startYear, setStartYear] = useState(today.getFullYear())
+  
+  const [endDay, setEndDay] = useState(today.getDate())
+  const [endMonth, setEndMonth] = useState(today.getMonth())
+  const [endYear, setEndYear] = useState(today.getFullYear())
 
-  // Функция по нахождению кол-ва дней в месяце
-  const daysInMonth = (month) => {
-    let daysInMonth = new Date(date.getFullYear(), +month + 1, 0).getDate(); // кол-во дней в месяце 
-    let arr = [];
-    for (let i = 1; i <= daysInMonth; i++){
-      arr.push(i)
-    } 
-    return arr   
-  }
-
+  const [listPurchases] = useState(() => {
+    const saved = localStorage.getItem('purchases')
+    return saved ? JSON.parse(saved) : []
+  })
 
   const monthOptions = [
-    {value: '0', text: 'января'},
-    {value: '1', text: 'февраля'},
-    {value: '2', text: 'марта'},
-    {value: '3', text: 'апреля'},
-    {value: '4', text: 'мая'},
-    {value: '5', text: 'июня'},
-    {value: '6', text: 'июля'},
-    {value: '7', text: 'августа'},
-    {value: '8', text: 'сентября'},
-    {value: '9', text: 'октября'},
-    {value: '10', text: 'ноября'},
-    {value: '11', text: 'декабря'}
-  ];
+    { value: '0', text: 'января' }, { value: '1', text: 'февраля' },
+    { value: '2', text: 'марта' }, { value: '3', text: 'апреля' },
+    { value: '4', text: 'мая' }, { value: '5', text: 'июня' },
+    { value: '6', text: 'июля' }, { value: '7', text: 'августа' },
+    { value: '8', text: 'сентября' }, { value: '9', text: 'октября' },
+    { value: '10', text: 'ноября' }, { value: '11', text: 'декабря' }
+  ]
 
-  const yearOptions = [
-    {value: '2020', text: '2020'},
-    {value: '2021', text: '2021'},
-    {value: '2022', text: '2022'},
-    {value: '2023', text: '2023'},
-    {value: '2024', text: '2024'},
-    {value: '2025', text: '2025'},
-    {value: '2026', text: '2026'},
-    {value: '2027', text: '2027'},
-    {value: '2028', text: '2028'},
-    {value: '2029', text: '2029'},
-    {value: '2030', text: '2030'}
-  ];
+  const yearOptions = Array.from({ length: 11 }, (_, i) => 2020 + i).map(y => ({
+    value: String(y), text: String(y)
+  }))
 
+  // Динамическое получение дней в месяце (исправленный баг!)
+  const getDaysInMonth = (year, month) => {
+    return new Date(year, Number(month) + 1, 0).getDate()
+  }
 
-  /* Определение дней из выбранного отрезка */
-  const d1 = new Date(`${selectedYear_1}-${+selectedMonth_1 + 1}-${selectedDay_1}`);
-  const d2 = new Date(`${selectedYear_2}-${+selectedMonth_2 + 1}-${selectedDay_2}`);
+  const getDaysArray = (year, month) => {
+    const daysCount = getDaysInMonth(year, month)
+    return Array.from({ length: daysCount }, (_, i) => i + 1)
+  }
 
-  function getDatesInRange(startDate, endDate) {
-    const date = new Date(startDate.getTime());
+  // Обработка быстрого выбора периода
+  const handlePeriodChange = (e) => {
+    const period = e.target.value
+    setSelectedPeriod(period)
+    
+    const end = new Date()
+    const start = new Date()
 
-    const dates = [];
-
-    while (date <= endDate) {
-      dates.push(`${new Date(date).getDate()}-${new Date(date).getMonth()}-${new Date(date).getFullYear()}`);
-      date.setDate(date.getDate() + 1);
+    if (period === 'День') {
+      // Оставляем текущую дату
+    } else if (period === 'Неделя') {
+      start.setDate(start.getDate() - 7)
+    } else if (period === 'Месяц') {
+      start.setMonth(start.getMonth() - 1)
+    } else if (period === 'Год') {
+      start.setFullYear(start.getFullYear() - 1)
     }
-    return dates;
+
+    if (period !== 'custom') {
+      setStartDay(start.getDate())
+      setStartMonth(start.getMonth())
+      setStartYear(start.getFullYear())
+      setEndDay(end.getDate())
+      setEndMonth(end.getMonth())
+      setEndYear(end.getFullYear())
+    }
   }
 
-  function summary(){
-    let choosedDates = getDatesInRange(d1, d2);
-    let sum = 0;
-    for (let elem of choosedDates) {
-      let res = listPurchases.filter(item => item.date === elem)
-      for (let elem of res) {
-        sum += +elem.costValue
+  const getDatesInRange = (startDate, endDate) => {
+    const dates = []
+    const curr = new Date(startDate)
+    while (curr <= endDate) {
+      dates.push(`${curr.getDate()}-${curr.getMonth()}-${curr.getFullYear()}`)
+      curr.setDate(curr.getDate() + 1)
+    }
+    return dates
+  }
+
+  const stats = useMemo(() => {
+    const d1 = new Date(startYear, startMonth, startDay)
+    const d2 = new Date(endYear, endMonth, endDay, 23, 59, 59)
+    
+    if (d1 > d2) return { total: 0, byCategory: [], count: 0 }
+
+    const targetDates = getDatesInRange(d1, d2)
+    
+    let total = 0
+    const byCategory = {}
+    let count = 0
+
+    listPurchases.forEach(purchase => {
+      if (targetDates.includes(purchase.date)) {
+        const cost = Number(purchase.costValue)
+        total += cost
+        count += 1
+        
+        if (!byCategory[purchase.categoriesName]) {
+          byCategory[purchase.categoriesName] = 0
+        }
+        byCategory[purchase.categoriesName] += cost
       }
-      setResult(sum)
-    }    
+    })
+
+    // Сортируем категории по убыванию суммы
+    const sortedCategories = Object.entries(byCategory)
+      .map(([name, amount]) => ({ name, amount }))
+      .sort((a, b) => b.amount - a.amount)
+
+    return { total, byCategory: sortedCategories, count }
+  }, [listPurchases, startDay, startMonth, startYear, endDay, endMonth, endYear])
+
+  // Цвета для категорий
+  const getCategoryColor = (catName) => {
+    const lower = catName.toLowerCase()
+    return '#a8edea'
   }
 
-
-  return <>
-          <div>
-            <button>
-                <NavLink to="/">На главную</NavLink>
-            </button>
+  return (
+    <div className={styles.pageWrapper}>
+      <div className={styles.card}>
+        {/* Шапка */}
+        <div className={styles.header}>
+          <NavLink to="/" className={styles.backButton}>
+            <ArrowLeft size={24} />
+          </NavLink>
+          <div className={styles.headerContent}>
+            <div className={styles.headerIcon}>📊</div>
             <h2>Статистика</h2>
-            <div className={styles.content}>
-              <div>
-                <label>
-                  <select 
-                      value={selected} 
-                      onChange={handleChange}
-                  >
-                        {options.map(option => (
-                          <option key={option.value} value={option.value} >
-                            {option.text}
-                          </option>
-                        ))}
-                  </select>
-                </label>
-              </div>
+          </div>
+        </div>
 
-              <div>
-                <div className={styles.title}>Выберите период</div>        
-                <div className={styles.selects}>
-                  <div className={styles.selects_text}> От: </div>
-                  <label>
-                    <select 
-                        defaultValue={date.getDate()} 
-                        onChange={e => setSelectedDay_1(e.target.value)}
-                    >
-                      {daysInMonth(date.getMonth()).map(i => (
-                        <option key={i} value={i}>
-                          {i}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label>
-                    <select 
-                        defaultValue={date.getMonth()}
-                        onChange={e => setSelectedMonth_1(e.target.value)}
-                    >
-                      {monthOptions.map(month => (
-                        <option key={month.value} value={month.value}>
-                          {month.text}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label>
-                    <select 
-                        defaultValue={date.getFullYear()}
-                        onChange={e => setSelectedYear_1(e.target.value)}
-                    >
-                      {yearOptions.map(year => (
-                        <option key={year.value} value={year.value}>
-                          {year.text}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
+        {/* Выбор периода */}
+        <div className={styles.periodSection}>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Быстрый выбор:</label>
+            <select 
+              className={styles.select}
+              value={selectedPeriod} 
+              onChange={handlePeriodChange}
+            >
+              <option value="custom">Свой период</option>
+              <option value="День">Сегодня</option>
+              <option value="Неделя">Последняя неделя</option>
+              <option value="Месяц">Последний месяц</option>
+              <option value="Год">Последний год</option>
+            </select>
+          </div>
 
-                <div className={styles.selects}>
-                  <div className={styles.selects_text}>До:</div>
-                  <label>
-                    <select 
-                        defaultValue={date.getDate()} 
-                        onChange={e => setSelectedDay_2(e.target.value)}
-                    >
-                      {daysInMonth(date.getMonth()).map(i => (
-                        <option key={i} value={i}>
-                          {i}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label>
-                    <select 
-                        defaultValue={date.getMonth()}
-                        onChange={e => setSelectedMonth_2(e.target.value)}
-                    >
-                      {monthOptions.map(month => (
-                        <option key={month.value} value={month.value}>
-                          {month.text}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label>
-                    <select 
-                        defaultValue={date.getFullYear()} 
-                        onChange={e => setSelectedYear_2(e.target.value)}
-                    >
-                      {yearOptions.map(year => (
-                        <option key={year.value} value={year.value}>
-                          {year.text}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
-
-                <button 
-                  onClick={summary}
-                >
-                  Высчитать
-                </button>                
-
-              </div>  
+          <div className={styles.dateRange}>
+            <div className={styles.dateRow}>
+              <span className={styles.dateLabel}>От:</span>
+              <select className={styles.dateSelect} value={startDay} onChange={e => setStartDay(Number(e.target.value))}>
+                {getDaysArray(startYear, startMonth).map(i => <option key={i} value={i}>{i}</option>)}
+              </select>
+              <select className={styles.dateSelect} value={startMonth} onChange={e => setStartMonth(Number(e.target.value))}>
+                {monthOptions.map(m => <option key={m.value} value={m.value}>{m.text}</option>)}
+              </select>
+              <select className={styles.dateSelect} value={startYear} onChange={e => setStartYear(Number(e.target.value))}>
+                {yearOptions.map(y => <option key={y.value} value={y.value}>{y.text}</option>)}
+              </select>
             </div>
 
-            <hr/>
-
-            <div>
-              {result > -1 ? `Рез-т: ${result} ₽`: null} 
+            <div className={styles.dateRow}>
+              <span className={styles.dateLabel}>До:</span>
+              <select className={styles.dateSelect} value={endDay} onChange={e => setEndDay(Number(e.target.value))}>
+                {getDaysArray(endYear, endMonth).map(i => <option key={i} value={i}>{i}</option>)}
+              </select>
+              <select className={styles.dateSelect} value={endMonth} onChange={e => setEndMonth(Number(e.target.value))}>
+                {monthOptions.map(m => <option key={m.value} value={m.value}>{m.text}</option>)}
+              </select>
+              <select className={styles.dateSelect} value={endYear} onChange={e => setEndYear(Number(e.target.value))}>
+                {yearOptions.map(y => <option key={y.value} value={y.value}>{y.text}</option>)}
+              </select>
             </div>
           </div>
-        </>
+        </div>
+
+        {/* Результаты */}
+        <div className={styles.resultsSection}>
+          <div className={styles.totalCard}>
+            <div className={styles.totalIcon}><TrendingUp size={32} /></div>
+            <div className={styles.totalInfo}>
+              <span className={styles.totalLabel}>Расходы за период:</span>
+              <span className={styles.totalAmount}>{stats.total.toLocaleString()} ₽</span>
+              <span className={styles.totalSublabel}>{stats.count} покупок</span>
+            </div>
+          </div>
+
+          {stats.byCategory.length > 0 ? (
+            <div className={styles.categoriesSection}>
+              <h3 className={styles.sectionTitle}>
+                <PieChart size={20} /> По категориям
+              </h3>
+              <div className={styles.categoriesList}>
+                {stats.byCategory.map((cat, index) => {
+                  const percentage = Math.round((cat.amount / stats.total) * 100)
+                  return (
+                    <div key={index} className={styles.categoryItem}>
+                      <div className={styles.categoryHeader}>
+                        <span className={styles.categoryName}>{cat.name}</span>
+                        <span className={styles.categoryPercent}>{percentage}%</span>
+                      </div>
+                      <div className={styles.progressBar}>
+                        <div 
+                          className={styles.progressFill}
+                          style={{ 
+                            width: `${percentage}%`,
+                            background: `linear-gradient(135deg, ${getCategoryColor(cat.name)}, ${getCategoryColor(cat.name)}88)`
+                          }}
+                        />
+                      </div>
+                      <div className={styles.categoryAmount}>{cat.amount.toLocaleString()} ₽</div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          ) : (
+            <div className={styles.emptyState}>
+              <div className={styles.emptyEmoji}>📭</div>
+              <div>Нет данных за выбранный период</div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default Stat
