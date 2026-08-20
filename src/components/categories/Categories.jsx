@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import { ArrowLeft } from 'lucide-react'
 
 import styles from "../../styles/Categories.module.css"; 
 
@@ -112,10 +113,16 @@ const Categories = () => {
 
 return (
         <div className={styles.card}>
-            <button>
-                <NavLink to="/">На главную</NavLink>
-            </button>
-            <h2>Категории</h2>
+            {/* Шапка */}
+            <div className={styles.header}>
+                <NavLink to="/" className={styles.backButton}>
+                    <ArrowLeft size={24} />
+                </NavLink>
+                <div className={styles.headerContent}>
+                    <div className={styles.headerIcon}>📚</div>
+                    <h2>Категории</h2>
+                </div>
+            </div>
 
             <div className={styles.title}>Добавить категорию</div>
             <div className={styles.inputButton}>
