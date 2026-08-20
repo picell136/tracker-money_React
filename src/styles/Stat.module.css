@@ -138,6 +138,35 @@
     border-color: #a8edea;
 }
 
+.exportBtn {
+    width: 100%;
+    margin-bottom: 24px;
+    padding: 14px 18px;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #a8edea, #fed6e3);
+    color: #2d3436;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(168, 237, 234, 0.45);
+    transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+
+.exportBtn:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+.exportBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
 /* --- Секция результатов --- */
 .resultsSection {
     display: flex;

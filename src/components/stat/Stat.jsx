@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import { NavLink } from 'react-router-dom'
-import { ArrowLeft, Calendar, TrendingUp, PieChart } from 'lucide-react'
+import { ArrowLeft, TrendingUp, PieChart, Download } from 'lucide-react'
 import styles from "../../styles/Stat.module.css"
 
 const Stat = () => {
@@ -86,19 +86,21 @@ const Stat = () => {
     const d1 = new Date(startYear, startMonth, startDay)
     const d2 = new Date(endYear, endMonth, endDay, 23, 59, 59)
     
-    if (d1 > d2) return { total: 0, byCategory: [], count: 0 }
+    if (d1 > d2) return { total: 0, byCategory: [], count: 0, purchases: [] }
 
     const targetDates = getDatesInRange(d1, d2)
     
     let total = 0
     const byCategory = {}
     let count = 0
+    const purchases = []
 
     listPurchases.forEach(purchase => {
       if (targetDates.includes(purchase.date)) {
         const cost = Number(purchase.costValue)
         total += cost
         count += 1
+        purchases.push(purchase)
         
         if (!byCategory[purchase.categoriesName]) {
           byCategory[purchase.categoriesName] = 0
@@ -112,13 +114,63 @@ const Stat = () => {
       .map(([name, amount]) => ({ name, amount }))
       .sort((a, b) => b.amount - a.amount)
 
-    return { total, byCategory: sortedCategories, count }
+    return { total, byCategory: sortedCategories, count, purchases }
   }, [listPurchases, startDay, startMonth, startYear, endDay, endMonth, endYear])
 
-  // Цвета для категорий
-  const getCategoryColor = (catName) => {
-    const lower = catName.toLowerCase()
-    return '#a8edea'
+  const getCategoryColor = () => '#a8edea'
+
+  const formatPurchaseDate = (dateStr) => {
+    const [day, month, year] = dateStr.split('-')
+    return `${String(day).padStart(2, '0')}.${String(Number(month) + 1).padStart(2, '0')}.${year}`
+  }
+
+  const csvCell = (value) => {
+    const text = String(value ?? '')
+    if (/[;"\n\r]/.test(text)) {
+      return `"${text.replace(/"/g, '""')}"`
+    }
+    return text
+  }
+
+  const periodLabel = `${String(startDay).padStart(2, '0')}.${String(Number(startMonth) + 1).padStart(2, '0')}.${startYear}-${String(endDay).padStart(2, '0')}.${String(Number(endMonth) + 1).padStart(2, '0')}.${endYear}`
+
+  const exportToCsv = () => {
+    if (stats.count === 0) return
+
+    const rows = [
+      ['Дата', 'Название', 'Категория', 'Сумма'].map(csvCell).join(';'),
+      ...stats.purchases.map((purchase) =>
+        [
+          formatPurchaseDate(purchase.date),
+          purchase.purchaseName,
+          purchase.categoriesName,
+          purchase.costValue
+        ].map(csvCell).join(';')
+      ),
+      '',
+      ['Итого по категориям'].map(csvCell).join(';'),
+      ['Категория', 'Сумма', 'Доля, %'].map(csvCell).join(';'),
+      ...stats.byCategory.map((cat) =>
+        [
+          cat.name,
+          cat.amount,
+          Math.round((cat.amount / stats.total) * 100)
+        ].map(csvCell).join(';')
+      ),
+      '',
+      ['Всего покупок', stats.count].map(csvCell).join(';'),
+      ['Итого, ₽', stats.total].map(csvCell).join(';')
+    ]
+
+    const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `statistika_${periodLabel}.csv`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
   }
 
   return (
@@ -180,6 +232,16 @@ const Stat = () => {
             </div>
           </div>
         </div>
+
+        <button
+          type="button"
+          className={styles.exportBtn}
+          onClick={exportToCsv}
+          disabled={stats.count === 0}
+        >
+          <Download size={18} />
+          Выгрузить в CSV
+        </button>
 
         {/* Результаты */}
         <div className={styles.resultsSection}>

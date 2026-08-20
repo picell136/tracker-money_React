@@ -38,6 +38,12 @@
     box-shadow: 0 4px 12px rgba(245, 183, 200, 0.5);
 }
 
+.navBtn.prev {
+    background: #f5b7c8;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(245, 183, 200, 0.5);
+}
+
 .navBtn:hover {
     transform: scale(1.1);
 }
