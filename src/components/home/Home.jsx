@@ -1,6 +1,7 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { NavLink } from 'react-router-dom'
-import { ChevronLeft, ChevronRight, Trash2, Edit2, Check, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Trash2, Edit2, Check, ChevronDown } from 'lucide-react'
+import { getAllCategories, getCategoryMeta, loadCustomCategories } from '../../data/categories'
 import styles from "../../styles/Home.module.css"
 
 const Home = () => {
@@ -18,10 +19,23 @@ const Home = () => {
         return saved ? JSON.parse(saved) : []
     })
 
-    const [listCategories] = useState(() => {
-        const saved = localStorage.getItem('categories')
-        return saved ? JSON.parse(saved) : []
-    })
+    const [isCategoryOpen, setIsCategoryOpen] = useState(false)
+    const categoryPickerRef = useRef(null)
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (categoryPickerRef.current && !categoryPickerRef.current.contains(event.target)) {
+                setIsCategoryOpen(false)
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [])
+
+    const [customCategories] = useState(() => loadCustomCategories())
+    const allCategories = useMemo(() => getAllCategories(customCategories), [customCategories])
+    const selectedCategory = getCategoryMeta(category, customCategories)
 
     // --- Логика дат ---
     const getLastDayofMonth = (year, month) => new Date(year, month + 1, 0).getDate()
@@ -149,16 +163,52 @@ const Home = () => {
                         />
                     </div>
                     <div className={styles.formRow}>
-                        <select 
-                            className={styles.formSelect} 
-                            value={category} 
-                            onChange={(e) => setCategory(e.target.value)}
-                        >
-                            <option value="">Выберите категорию</option>
-                            {listCategories.map((cat, i) => (
-                                <option key={i} value={cat.categoriesName}>{cat.categoriesName}</option>
-                            ))}
-                        </select>
+                        <div className={styles.categoryPicker} ref={categoryPickerRef}>
+                            <button
+                                type="button"
+                                className={styles.categoryTrigger}
+                                onClick={() => setIsCategoryOpen((open) => !open)}
+                            >
+                                {category ? (
+                                    <>
+                                        <span
+                                            className={styles.categoryIcon}
+                                            style={{ background: selectedCategory.color }}
+                                        >
+                                            {selectedCategory.emoji}
+                                        </span>
+                                        <span className={styles.categoryTriggerName}>{selectedCategory.name}</span>
+                                    </>
+                                ) : (
+                                    <span className={styles.categoryPlaceholder}>Выберите категорию</span>
+                                )}
+                                <ChevronDown size={18} className={styles.categoryChevron} />
+                            </button>
+                            {isCategoryOpen && (
+                                <ul className={styles.categoryMenu}>
+                                    {allCategories.map((cat) => (
+                                        <li key={cat.name}>
+                                            <button
+                                                type="button"
+                                                className={`${styles.categoryOption} ${category === cat.name ? styles.categoryOptionActive : ''}`}
+                                                onClick={() => {
+                                                    setCategory(cat.name)
+                                                    setIsCategoryOpen(false)
+                                                }}
+                                            >
+                                                <span
+                                                    className={styles.categoryIcon}
+                                                    style={{ background: cat.color }}
+                                                >
+                                                    {cat.emoji}
+                                                </span>
+                                                <span>{cat.name}</span>
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
                         <input
                             className={styles.formInput}
                             type="number"
@@ -204,12 +254,16 @@ const Home = () => {
                                                 onChange={(e) => handleEditChange(elem.creationTime, 'categoriesName', e.target.value)}
                                                 style={{ flexShrink: 0 }}
                                             >
-                                                {listCategories.map((cat, i) => (
-                                                    <option key={i} value={cat.categoriesName}>{cat.categoriesName}</option>
+                                                {allCategories.map((cat) => (
+                                                    <option key={cat.name} value={cat.name}>{cat.emoji} {cat.name}</option>
                                                 ))}
                                             </select>
                                         ) : (
-                                            <span className={`${styles.expenseBadge}`}>
+                                            <span
+                                                className={styles.expenseBadge}
+                                                style={{ backgroundColor: getCategoryMeta(elem.categoriesName, customCategories).color }}
+                                            >
+                                                <span className={styles.badgeEmoji}>{getCategoryMeta(elem.categoriesName, customCategories).emoji}</span>
                                                 {elem.categoriesName}
                                             </span>
                                         )}

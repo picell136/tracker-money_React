@@ -1,23 +1,33 @@
-import React from 'react'
-
-import Home from '../home/Home'
-import { NavLink, Outlet } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
 
 import styles from '../../styles/Layout.module.css'
 
-const HomePage = () => {
-
-    return <>
-            <div className={styles['main-container']}>
-                <div className={styles.container}>
-                    <div className={styles.header}>
-                        <div className={styles['header-icon']}>💰</div>
-                        <h1>Журнал расхода денег</h1>
-                    </div>
-                    <Outlet />
-                </div>
-            </div>
-        </>
+const PAGE_TITLES = {
+    '/': 'Журнал расходов',
+    '/categories': 'Категории',
+    '/stat': 'Статистика',
 }
 
-export default HomePage
+const Layout = () => {
+    const { pathname } = useLocation()
+    const title = PAGE_TITLES[pathname] || 'Журнал расходов'
+
+    useEffect(() => {
+        document.title = title
+    }, [title])
+
+    return (
+        <div className={styles['main-container']}>
+            <div className={styles.container}>
+                <div className={styles.header}>
+                    <div className={styles['header-icon']}>💰</div>
+                    <h1>{title}</h1>
+                </div>
+                <Outlet />
+            </div>
+        </div>
+    )
+}
+
+export default Layout

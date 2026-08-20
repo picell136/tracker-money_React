@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import { NavLink } from 'react-router-dom'
 import { ArrowLeft, TrendingUp, PieChart, Download } from 'lucide-react'
+import { getCategoryMeta } from '../../data/categories'
 import styles from "../../styles/Stat.module.css"
 
 const Stat = () => {
@@ -116,8 +117,6 @@ const Stat = () => {
 
     return { total, byCategory: sortedCategories, count, purchases }
   }, [listPurchases, startDay, startMonth, startYear, endDay, endMonth, endYear])
-
-  const getCategoryColor = () => '#a8edea'
 
   const formatPurchaseDate = (dateStr) => {
     const [day, month, year] = dateStr.split('-')
@@ -262,10 +261,14 @@ const Stat = () => {
               <div className={styles.categoriesList}>
                 {stats.byCategory.map((cat, index) => {
                   const percentage = Math.round((cat.amount / stats.total) * 100)
+                  const meta = getCategoryMeta(cat.name)
                   return (
                     <div key={index} className={styles.categoryItem}>
                       <div className={styles.categoryHeader}>
-                        <span className={styles.categoryName}>{cat.name}</span>
+                        <span className={styles.categoryName}>
+                          <span className={styles.categoryIcon} style={{ background: meta.color }}>{meta.emoji}</span>
+                          {cat.name}
+                        </span>
                         <span className={styles.categoryPercent}>{percentage}%</span>
                       </div>
                       <div className={styles.progressBar}>
@@ -273,7 +276,7 @@ const Stat = () => {
                           className={styles.progressFill}
                           style={{ 
                             width: `${percentage}%`,
-                            background: `linear-gradient(135deg, ${getCategoryColor(cat.name)}, ${getCategoryColor(cat.name)}88)`
+                            background: meta.color
                           }}
                         />
                       </div>
