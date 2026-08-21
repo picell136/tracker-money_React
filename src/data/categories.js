@@ -1,3 +1,5 @@
+import { getUserItem, setUserItem } from './userStorage'
+
 export const CATEGORIES = [
   { name: 'Еда', emoji: '🍔', color: '#ff8a65' },
   { name: 'Транспорт', emoji: '🚌', color: '#4fc3f7' },
@@ -38,25 +40,25 @@ export const loadCustomCategories = () => {
     }
   }
 
-  const saved = localStorage.getItem(CUSTOM_KEY)
+  const saved = getUserItem(CUSTOM_KEY)
   if (saved) {
     return parseList(saved).filter(
       (category) => !CATEGORIES.some((item) => item.name.toLowerCase() === category.name.toLowerCase())
     )
   }
 
-  const legacy = localStorage.getItem(LEGACY_KEY)
+  const legacy = getUserItem(LEGACY_KEY)
   if (!legacy) return []
 
   const migrated = parseList(legacy).filter(
     (category) => !CATEGORIES.some((item) => item.name.toLowerCase() === category.name.toLowerCase())
   )
-  localStorage.setItem(CUSTOM_KEY, JSON.stringify(migrated))
+  setUserItem(CUSTOM_KEY, JSON.stringify(migrated))
   return migrated
 }
 
 export const saveCustomCategories = (categories) => {
-  localStorage.setItem(CUSTOM_KEY, JSON.stringify(categories))
+  setUserItem(CUSTOM_KEY, JSON.stringify(categories))
 }
 
 export const getAllCategories = (customCategories = loadCustomCategories()) => [

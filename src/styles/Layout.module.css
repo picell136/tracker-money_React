@@ -10,18 +10,35 @@
 .container { 
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     width: 100%;
-    max-width: 600px; 
-    text-align: center;
+    max-width: 520px; 
 }
 
 .header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 12px;
     margin-bottom: 24px;
-    margin-left: 40px;
     flex-shrink: 0;
+}
+
+.headerMain {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    flex: 1;
+}
+
+.header h1 {
+    font-size: 27px;
+    color: #2d3436;
+    font-weight: 700;
+    margin: 0;
+    text-align: left;
+    line-height: 1.2;
 }
 
 .header-icon {
@@ -36,11 +53,24 @@
     flex-shrink: 0;
 }
 
-.header h1 {
-    font-size: 27px;
-    color: #2d3436;
-    font-weight: 700;
-    margin: 0;
+.logoutBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 12px;
+    background: #fff;
+    color: #636e72;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
+}
+
+.logoutBtn:hover {
+    color: #f5576c;
 }
 
 /* Адаптивность для мобильных устройств */

@@ -1,41 +1,49 @@
-import React from 'react';
 import { Routes, Route } from 'react-router-dom'
 
-import { createBrowserRouter } from 'react-router-dom'
-
-import Layout from './components/layout/Layout';
-// import NotFound404 from './components/notFound404/NotFound404';
-// import PurchasesList from './components/PurchasesList';
+import { AuthProvider } from './context/AuthContext'
+import { GuestOnly, RequireAuth } from './components/auth/RequireAuth'
+import Layout from './components/layout/Layout'
 import Home from './components/home/Home'
 import Categories from './components/categories/Categories'
 import Stat from './components/stat/Stat'
+import Login from './components/auth/Login'
+import Register from './components/auth/Register'
 import NotFound404 from './components/notFound404/NotFound404'
 
-const router = createBrowserRouter([
-	{ path: '/', 
-	  element: <Layout />, 
-	  // errorElement: <NotFound404 />,
-	  children: [
-			{
-				// path: '/show',
-				element: <Home />,
-			},
-		], 
-	},
-])
-
-//
-
 export default function App() {
-
   return (
-		<Routes router={router}>
-			<Route path="/" element={<Layout />}>
-                <Route index element={<Home />} />
-				<Route path='/categories' element={<Categories />} />
-				<Route path='/stat' element={<Stat />} />
-				<Route path="*" element={<NotFound404 />} />
-            </Route>
-		</Routes>
+    <AuthProvider>
+      <Routes>
+        <Route
+          path="/login"
+          element={
+            <GuestOnly>
+              <Login />
+            </GuestOnly>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <GuestOnly>
+              <Register />
+            </GuestOnly>
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <RequireAuth>
+              <Layout />
+            </RequireAuth>
+          }
+        >
+          <Route index element={<Home />} />
+          <Route path="categories" element={<Categories />} />
+          <Route path="stat" element={<Stat />} />
+          <Route path="*" element={<NotFound404 />} />
+        </Route>
+      </Routes>
+    </AuthProvider>
   )
 }

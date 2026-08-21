@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react'
 import { NavLink } from 'react-router-dom'
 import { ArrowLeft, TrendingUp, PieChart, Download } from 'lucide-react'
 import { getCategoryMeta } from '../../data/categories'
+import { getUserItem } from '../../data/userStorage'
 import styles from "../../styles/Stat.module.css"
 
 const Stat = () => {
@@ -18,7 +19,7 @@ const Stat = () => {
   const [endYear, setEndYear] = useState(today.getFullYear())
 
   const [listPurchases] = useState(() => {
-    const saved = localStorage.getItem('purchases')
+    const saved = getUserItem('purchases')
     return saved ? JSON.parse(saved) : []
   })
 

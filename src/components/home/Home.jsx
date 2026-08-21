@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect, useRef } from 'react'
 import { NavLink } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, Trash2, Edit2, Check, ChevronDown } from 'lucide-react'
 import { getAllCategories, getCategoryMeta, loadCustomCategories } from '../../data/categories'
+import { getUserItem, setUserItem } from '../../data/userStorage'
 import styles from "../../styles/Home.module.css"
 
 const Home = () => {
@@ -15,7 +16,7 @@ const Home = () => {
     const [cost, setCost] = useState('')
 
     const [listPurchases, setListPurchases] = useState(() => {
-        const saved = localStorage.getItem('purchases')
+        const saved = getUserItem('purchases')
         return saved ? JSON.parse(saved) : []
     })
 
@@ -91,7 +92,7 @@ const Home = () => {
 
         const updatedList = [...listPurchases, newPurchase]
         setListPurchases(updatedList)
-        localStorage.setItem('purchases', JSON.stringify(updatedList))
+        setUserItem('purchases', JSON.stringify(updatedList))
         
         setName('')
         setCategory('')
@@ -103,7 +104,7 @@ const Home = () => {
             p.creationTime === creationTime ? { ...p, isEdit: !p.isEdit } : p
         )
         setListPurchases(updatedList)
-        localStorage.setItem('purchases', JSON.stringify(updatedList))
+        setUserItem('purchases', JSON.stringify(updatedList))
     }
 
     const handleEditChange = (creationTime, field, newValue) => {
@@ -111,13 +112,13 @@ const Home = () => {
             p.creationTime === creationTime ? { ...p, [field]: newValue } : p
         )
         setListPurchases(updatedList)
-        localStorage.setItem('purchases', JSON.stringify(updatedList))
+        setUserItem('purchases', JSON.stringify(updatedList))
     }
 
     const deletePurchase = (creationTime) => {
         const updatedList = listPurchases.filter(p => p.creationTime !== creationTime)
         setListPurchases(updatedList)
-        localStorage.setItem('purchases', JSON.stringify(updatedList))
+        setUserItem('purchases', JSON.stringify(updatedList))
     }
 
     const filtered = listPurchases.filter(p => p.date === `${displayDay}-${displayMonth}-${displayYear}`)
