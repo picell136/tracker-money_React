@@ -7,9 +7,14 @@ import { BrowserRouter } from "react-router-dom";
 import './index.css'
 import App from './App.jsx'
 
+const GITHUB_PAGES_BASE = '/tracker-money_React'
+const basename = window.location.pathname.startsWith(GITHUB_PAGES_BASE)
+  ? GITHUB_PAGES_BASE
+  : '/'
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter basename="/">
+    <BrowserRouter basename={basename}>
 				<App />
     </BrowserRouter>
   </StrictMode>,

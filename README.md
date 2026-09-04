@@ -1,16 +1,76 @@
-# React + Vite
+# Журнал расходов
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Веб-приложение для учёта повседневных трат: покупки по дням, категории, статистика за период и выгрузка в CSV. Данные хранятся в браузере (`localStorage`), отдельно для каждого пользователя.
 
-Currently, two official plugins are available:
+Демо: [https://picell136.github.io/tracker-money_React/](https://picell136.github.io/tracker-money_React/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Возможности
 
-## React Compiler
+- Регистрация и вход (логин и пароль)
+- Добавление, редактирование и удаление покупок за выбранный день
+- 12 готовых категорий (еда, транспорт, жильё и др.) и свои категории
+- Статистика расходов за период (день, неделя, месяц, год или произвольный диапазон)
+- Выгрузка статистики в CSV
+- Выход из аккаунта
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Стек
 
-## Expanding the ESLint configuration
+- React 19
+- Vite 8
+- React Router
+- CSS Modules
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Требования
+
+- [Node.js](https://nodejs.org/) 20 или новее
+- npm (ставится вместе с Node.js)
+
+## Установка и запуск
+
+Если клонировали весь репозиторий, сначала перейдите в эту папку:
+
+```bash
+cd my-app
+```
+
+Затем:
+
+```bash
+npm install
+npm run dev
+```
+
+В терминале появится адрес локального сервера, обычно [http://localhost:5173](http://localhost:5173). Откройте его в браузере.
+
+Сначала зарегистрируйте аккаунт, затем войдите и добавляйте покупки.
+
+## Скрипты
+
+| Команда | Назначение |
+|---|---|
+| `npm run dev` | Режим разработки |
+| `npm run build` | Сборка в папку `dist` |
+| `npm run preview` | Просмотр production-сборки локально |
+| `npm run deploy` | Сборка и публикация на GitHub Pages |
+
+## Сборка для хостинга
+
+```bash
+npm run build
+```
+
+В папке `dist` появятся статические файлы. На обычный хостинг (например Beget) загрузите **содержимое** `dist` в `public_html` домена: `index.html`, папка `assets`, `.htaccess` и остальное.
+
+Для GitHub Pages:
+
+```bash
+npm run deploy
+```
+
+Сайт откроется по адресу `https://<логин>.github.io/tracker-money_React/`.
+
+## Замечания
+
+- Аккаунты и покупки не уходят на сервер: они живут в `localStorage` этого браузера и этого домена.
+- На HTTP регистрация тоже работает; для продакшена лучше открывать сайт по HTTPS.
+- `.htaccess` нужен Apache (Beget), чтобы маршруты `/categories` и `/stat` не отдавали 404 при обновлении страницы. GitHub Pages этот файл не использует.
